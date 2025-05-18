@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Users Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Created by Abdul Ahad</h1>
+    <form id="userForm">
+      <input type="text" id="name" placeholder="Enter name" required>
+      <input type="text" id="description" placeholder="Description" required>
+      <button type="submit">Add User</button>
+    </form>
+
+    <h2>Users</h2>
+    <ul id="userList"></ul>
+  </div>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        const list = document.getElementById('userList');
+        list.innerHTML = '';
+        users.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.name} - ${user.description}`;
+          list.appendChild(li);
+        });
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    }
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const description = document.getElementById('description').value;
+      try {
+        await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, description })
+        });
+        document.getElementById('name').value = '';
+        document.getElementById('description').value = '';
+        fetchUsers();
+      } catch (error) {
+        console.error('Error adding user:', error);
+      }
+    });
+
+    fetchUsers();
+  </script>
+</body>
+</html>

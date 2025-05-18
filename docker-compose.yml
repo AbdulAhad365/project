@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb+srv://ahad:ahad1234@cluster0.vx3tntm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
